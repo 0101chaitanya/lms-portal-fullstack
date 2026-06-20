@@ -24,7 +24,7 @@ export const courseSlice = createSlice({
     name: 'course',
     initialState,
     reducers: {
-        resetCourses: (state) => initialState,
+        resetCourses: () => initialState,
     },
     extraReducers: (builder) => {
         builder

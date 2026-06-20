@@ -28,8 +28,13 @@ export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) =
 
 // Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
-    await api.post('/auth/logout');
-    localStorage.removeItem('user');
+    try {
+        await api.post('/auth/logout');
+    } catch (error) {
+        console.error('Logout API failed, clearing local data anyway', error);
+    } finally {
+        localStorage.removeItem('user');
+    }
 });
 
 export const authSlice = createSlice({

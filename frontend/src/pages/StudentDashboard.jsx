@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Grid, Card, CardMedia, CardContent, Typography, Button, Box, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
@@ -26,7 +26,7 @@ const StudentDashboard = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -34,7 +34,7 @@ const StudentDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight="bold">
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
         My Learning
       </Typography>
       
@@ -54,7 +54,7 @@ const StudentDashboard = () => {
                   alt={course.title}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h6" component="h2" fontWeight="bold">
+                  <Typography gutterBottom variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                     {course.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>

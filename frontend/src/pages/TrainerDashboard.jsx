@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress, TextField, Button, Paper, Alert } from '@mui/material';
 import api from '../api/axios';
 import { useSelector } from 'react-redux';
@@ -34,6 +34,7 @@ const TrainerDashboard = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,7 +58,7 @@ const TrainerDashboard = () => {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -65,7 +66,7 @@ const TrainerDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight="bold">
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
         Trainer Dashboard
       </Typography>
 
@@ -101,7 +102,7 @@ const TrainerDashboard = () => {
         {/* Create Course Form */}
         <Grid item xs={12} md={5}>
           <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
               Create New Course
             </Typography>
             
@@ -139,7 +140,7 @@ const TrainerDashboard = () => {
 
         {/* List of Created Courses */}
         <Grid item xs={12} md={7}>
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
             My Published Courses
           </Typography>
           {myCourses.length === 0 ? (

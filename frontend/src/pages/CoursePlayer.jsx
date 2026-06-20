@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Grid, Typography, List, ListItem, ListItemButton, ListItemText, Paper, Box, Divider } from '@mui/material';
 import api from '../api/axios';
@@ -50,7 +50,7 @@ const CoursePlayer = () => {
                   allowFullScreen
                 />
               ) : (
-                <Box display="flex" justifyContent="center" alignItems="center" height="100%" position="absolute" width="100%" bgcolor="#000">
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', position: 'absolute', width: '100%', bgcolor: '#000' }}>
                   <Typography color="white">No Video Available</Typography>
                 </Box>
               )}
@@ -59,7 +59,7 @@ const CoursePlayer = () => {
 
           {currentTopic && (
             <Box sx={{ p: 2 }}>
-              <Typography variant="h5" fontWeight="bold" gutterBottom>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold' }}>
                 {currentTopic.title}
               </Typography>
               <Typography variant="body1" color="text.secondary">
@@ -73,7 +73,7 @@ const CoursePlayer = () => {
         <Grid item xs={12} md={4}>
           <Paper elevation={3} sx={{ height: 'calc(100vh - 120px)', overflow: 'auto' }}>
             <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-              <Typography variant="h6" fontWeight="bold">Course Content</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Course Content</Typography>
             </Box>
             <Divider />
             <List disablePadding>
@@ -94,7 +94,7 @@ const CoursePlayer = () => {
                     >
                       <ListItemText 
                         primary={`${index + 1}. ${topic.title}`} 
-                        primaryTypographyProps={{ fontWeight: currentTopic?._id === topic._id ? 'bold' : 'normal' }}
+                        primaryTypographyProps={{ sx: { fontWeight: currentTopic?._id === topic._id ? 'bold' : 'normal' } }}
                       />
                     </ListItemButton>
                   </ListItem>

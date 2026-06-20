@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { 
   Container, Grid, Card, CardContent, Typography, Box, CircularProgress, 
   Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button,
@@ -33,6 +33,7 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchAdminData(activeTab);
   }, [activeTab]);
 
@@ -69,7 +70,7 @@ const AdminDashboard = () => {
 
   if (loading && !metrics) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -77,7 +78,7 @@ const AdminDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom fontWeight="bold">
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
         Admin Dashboard
       </Typography>
 
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
           <Grid item xs={12} sm={6} md={3} key={idx}>
             <Card elevation={3} sx={{ borderTop: `5px solid ${metric.color}` }}>
               <CardContent>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography color="text.secondary" gutterBottom>
                   {metric.label}
                 </Typography>
                 <Typography variant="h4" component="div">
