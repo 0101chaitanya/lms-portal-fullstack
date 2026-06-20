@@ -22,6 +22,7 @@ const App = () => {
         {/* Protected Student Routes */}
         <Route element={<ProtectedRoute allowedRoles={['student']} />}>
           <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/course/:id" element={<CoursePlayer />} />
         </Route>
 
         {/* Protected Trainer Routes (Admins can usually access trainer views too) */}
