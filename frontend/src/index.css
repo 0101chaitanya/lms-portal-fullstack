@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Global Reset for consistency across all browsers */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.02);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #f3f4f6;
+  min-height: 100vh;
+  background-color: #0b0f19;
+}
+
+/* Background gradient container that renders consistently and with high performance */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #0b0f19;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+}

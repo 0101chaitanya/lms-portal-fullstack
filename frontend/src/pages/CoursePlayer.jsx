@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, Typography, List, ListItem, ListItemButton, ListItemText, Paper, Box, Divider } from '@mui/material';
+import { Container, Typography, List, ListItem, ListItemButton, ListItemText, Paper, Box, Divider } from '@mui/material';
 import api from '../api/axios';
 
 const CoursePlayer = () => {
@@ -34,10 +34,18 @@ const CoursePlayer = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-      <Grid container spacing={3}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexDirection: { xs: 'column', md: 'row' }, 
+        gap: 3, 
+        width: '100%' 
+      }}>
         
         {/* Left Side: Video Player & Description */}
-        <Grid item xs={12} md={8}>
+        <Box sx={{ 
+          flex: { xs: 'none', md: '8 8 0px' },
+          width: { xs: '100%', md: '66.67%' }
+        }}>
           <Paper elevation={3} sx={{ overflow: 'hidden', mb: 2 }}>
             <Box sx={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
               {currentTopic && currentTopic.videoUrl ? (
@@ -67,10 +75,13 @@ const CoursePlayer = () => {
               </Typography>
             </Box>
           )}
-        </Grid>
+        </Box>
 
         {/* Right Side: Topics List (Course Content) */}
-        <Grid item xs={12} md={4}>
+        <Box sx={{ 
+          flex: { xs: 'none', md: '4 4 0px' },
+          width: { xs: '100%', md: '33.33%' }
+        }}>
           <Paper elevation={3} sx={{ height: 'calc(100vh - 120px)', overflow: 'auto' }}>
             <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'primary.contrastText' }}>
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Course Content</Typography>
@@ -102,9 +113,9 @@ const CoursePlayer = () => {
               )}
             </List>
           </Paper>
-        </Grid>
+        </Box>
 
-      </Grid>
+      </Box>
     </Container>
   );
 };

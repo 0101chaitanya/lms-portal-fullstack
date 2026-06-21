@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { 
-  Container, Grid, Card, CardContent, Typography, Box, CircularProgress, 
+  Container, Card, CardContent, Typography, Box, CircularProgress, 
   Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField
 } from '@mui/material';
@@ -119,14 +119,27 @@ const AdminDashboard = () => {
       </Box>
 
       {/* Platform Metrics */}
-      <Grid container spacing={3} sx={{ mb: 5 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        gap: 3, 
+        mb: 5,
+        width: '100%' 
+      }}>
         {[
           { label: 'Total Trainers', value: metrics?.totalTrainers, color: '#1976d2' },
           { label: 'Total Students', value: metrics?.totalStudents, color: '#2e7d32' },
           { label: 'Total Courses', value: metrics?.totalCourses, color: '#ed6c02' },
           { label: 'Total Topics', value: metrics?.totalTopics, color: '#9c27b0' },
         ].map((metric, idx) => (
-          <Grid item xs={12} sm={6} md={3} key={idx}>
+          <Box 
+            key={idx} 
+            sx={{ 
+              flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 18px)' },
+              width: '100%',
+              maxWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' }
+            }}
+          >
             <Card elevation={3} sx={{ borderTop: `5px solid ${metric.color}` }}>
               <CardContent>
                 <Typography color="text.secondary" gutterBottom>
@@ -137,9 +150,9 @@ const AdminDashboard = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
 
       {/* User Management Section */}
       <Paper elevation={3} sx={{ width: '100%', mb: 2, p: 2 }}>
