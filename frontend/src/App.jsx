@@ -1,4 +1,3 @@
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,10 +12,12 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Unauthorized from "./pages/Unauthorized.jsx";
+import Navbar from "./components/Navbar.jsx";
 
 const App = () => {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         {/* Public Routes */}
