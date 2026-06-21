@@ -34,9 +34,11 @@ const StudentDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-        My Learning
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', m: 0 }}>
+          My Learning
+        </Typography>
+      </Box>
       
       {courses.length === 0 ? (
         <Typography variant="subtitle1" color="text.secondary">

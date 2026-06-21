@@ -7,10 +7,11 @@ import Enrollment from '../models/Enrollment.js';
 // @access  Private (Trainer)
 export const getTrainerMetrics = async (req, res) => {
     try {
-        const trainerId = req.user._id;
+        const isAdmin = req.user.role === 'admin';
+        const filter = isAdmin ? {} : { trainerId: req.user._id };
 
-        // Get all courses owned by this trainer
-        const courses = await Course.find({ trainerId });
+        // Get courses matching filter (all for admin, specific trainer's for trainer)
+        const courses = await Course.find(filter);
         const courseIds = courses.map(course => course._id);
 
         const totalCourses = courses.length;

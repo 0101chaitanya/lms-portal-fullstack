@@ -5,6 +5,7 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, TextField
 } from '@mui/material';
 import api from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
   const [metrics, setMetrics] = useState(null);
@@ -12,9 +13,33 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('trainer'); // 'trainer' or 'student'
   
+  const navigate = useNavigate();
+
   // Add Trainer Dialog State
   const [openDialog, setOpenDialog] = useState(false);
   const [trainerData, setTrainerData] = useState({ name: '', email: '', password: '' });
+
+  // Edit User Dialog State
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [editUserData, setEditUserData] = useState({ id: '', name: '', email: '' });
+
+  const handleEditClick = (user) => {
+    setEditUserData({ id: user._id, name: user.name, email: user.email });
+    setOpenEditDialog(true);
+  };
+
+  const handleUpdateUser = async () => {
+    try {
+      await api.put(`/admin/users/${editUserData.id}`, {
+        name: editUserData.name,
+        email: editUserData.email,
+      });
+      setOpenEditDialog(false);
+      fetchAdminData(activeTab);
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to update user');
+    }
+  };
 
   const fetchAdminData = async (role = 'trainer') => {
     setLoading(true);
@@ -78,9 +103,20 @@ const AdminDashboard = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-        Admin Dashboard
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', m: 0 }}>
+            Admin Dashboard
+          </Typography>
+          <Button 
+            variant="contained" 
+            color="secondary" 
+            onClick={() => navigate('/trainer/dashboard')}
+          >
+            Manage Courses & Topics
+          </Button>
+        </Box>
+      </Box>
 
       {/* Platform Metrics */}
       <Grid container spacing={3} sx={{ mb: 5 }}>
@@ -162,8 +198,17 @@ const AdminDashboard = () => {
                     <TableCell align="right">
                       <Button 
                         size="small" 
+                        color="primary" 
+                        onClick={() => handleEditClick(row)}
+                        sx={{ mr: 1 }}
+                      >
+                        Edit
+                      </Button>
+                      <Button 
+                        size="small" 
                         color={row.status === 'active' ? 'warning' : 'success'} 
                         onClick={() => handleToggleStatus(row._id)}
+                        sx={{ mr: 1 }}
                       >
                         {row.status === 'active' ? 'Deactivate' : 'Activate'}
                       </Button>
@@ -190,6 +235,34 @@ const AdminDashboard = () => {
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
           <Button onClick={handleAddTrainer} variant="contained" color="primary">Add Trainer</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Edit User Dialog */}
+      <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+        <DialogTitle>Edit {activeTab === 'trainer' ? 'Trainer' : 'Student'} Info</DialogTitle>
+        <DialogContent>
+          <TextField 
+            autoFocus 
+            margin="dense" 
+            label="Full Name" 
+            type="text" 
+            fullWidth 
+            value={editUserData.name} 
+            onChange={(e) => setEditUserData({...editUserData, name: e.target.value})} 
+          />
+          <TextField 
+            margin="dense" 
+            label="Email Address" 
+            type="email" 
+            fullWidth 
+            value={editUserData.email} 
+            onChange={(e) => setEditUserData({...editUserData, email: e.target.value})} 
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenEditDialog(false)}>Cancel</Button>
+          <Button onClick={handleUpdateUser} variant="contained" color="primary">Save Changes</Button>
         </DialogActions>
       </Dialog>
     </Container>

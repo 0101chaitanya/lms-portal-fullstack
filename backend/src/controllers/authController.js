@@ -1,6 +1,7 @@
 import User from '../models/User.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateTokens.js';
 import { Resend } from 'resend';
+import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -147,4 +148,31 @@ export const logoutUser = (req, res) => {
         expires: new Date(0),
     });
     res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// @desc    Refresh access token
+// @route   POST /api/auth/refresh
+// @access  Public
+export const refreshAccessToken = async (req, res) => {
+    const refreshToken = req.cookies.jwt;
+
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Not authorized, no refresh token' });
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        const user = await User.findById(decoded.id);
+
+        if (!user || user.status === 'inactive') {
+            return res.status(401).json({ message: 'Not authorized, user inactive or not found' });
+        }
+
+        const accessToken = generateAccessToken(user._id, user.role);
+
+        res.json({ accessToken });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: 'Not authorized, token failed' });
+    }
 };
