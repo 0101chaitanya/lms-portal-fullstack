@@ -5,6 +5,7 @@ import {
     loginUser,
     logoutUser,
     refreshAccessToken,
+    updateUserProfile,
 } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -18,5 +19,6 @@ router.post('/refresh', refreshAccessToken);
 
 // Protected routes
 router.post('/logout', protect, logoutUser);
+router.put('/profile', protect, updateUserProfile);
 
 export default router;
