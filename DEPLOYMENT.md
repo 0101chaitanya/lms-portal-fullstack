@@ -1,35 +1,52 @@
-# Vercel Deployment Guide (Unified Setup)
+# Vercel Deployment Guide
 
-This project is configured as a **unified monorepo deployment** on Vercel. A single `vercel.json` file in the root manages building both the frontend client and backend API, hosting them together on the **same domain**.
-
-This configuration eliminates CORS configuration issues and simplifies secure `HttpOnly` cookie setups.
+This repository is configured to support **two different deployment strategies** on Vercel:
+1. **Option A (Recommended)**: Unified deployment (both frontend and backend deployed as a **single Vercel project** under one domain).
+2. **Option B**: Separate deployments (frontend and backend deployed as **two separate Vercel projects** under different domains).
 
 ---
 
-## Deployment Steps
+## Option A: Unified Deployment (Recommended)
 
-### 1. Create the Project on Vercel
-1. Log in to your Vercel Dashboard and click **Add New > Project**.
-2. **Import your repository** containing this monorepo.
-3. In the project settings configuration:
-   - **Framework Preset**: Select **Vite** (Vercel will auto-detect Vite inside the monorepo root builders).
-   - **Root Directory**: Leave this **blank** (keep it as the repository root directory `./`).
+This strategy deploys the entire repository as a single project. The API will be accessible at `/api/*` on the same domain as the frontend, which simplifies CORS configuration and cookie domains.
 
-### 2. Configure Environment Variables
-Expand the **Environment Variables** section and add the following keys. *All of these will be configured in this single Vercel project:*
+### Steps:
+1. On Vercel, select **Add New > Project** and import the repository.
+2. Configure project settings:
+   - **Framework Preset**: Vite (auto-detected).
+   - **Root Directory**: Leave **blank** (uses repository root `./`).
+3. Set **Environment Variables** in this project:
+   - `MONGO_URI`: Your MongoDB connection string.
+   - `JWT_ACCESS_SECRET`: A secure random string for signing access tokens.
+   - `JWT_REFRESH_SECRET`: A secure random string for signing refresh tokens.
+   - `RESEND_API_KEY`: Your Resend API key.
+   - `RESEND_FROM_EMAIL`: The verified sender address for OTP emails.
+   - `NODE_ENV`: Set to `production`.
+   - `CLIENT_URL`: The domain of the Vercel project itself (e.g. `https://my-lms-portal.vercel.app`).
+   - `VITE_API_URL`: Set to `/api` (uses relative pathing since they share a domain).
+4. Click **Deploy**.
 
-* **Backend Variables (Node.js runtime)**:
-  - `MONGO_URI`: Your MongoDB database connection string (e.g. `mongodb+srv://...`).
-  - `JWT_ACCESS_SECRET`: A secure random string for signing access tokens (e.g., `your_secure_access_secret`).
-  - `JWT_REFRESH_SECRET`: A secure random string for signing refresh tokens (e.g., `your_secure_refresh_secret`).
-  - `RESEND_API_KEY`: Your Resend API mailer key.
-  - `RESEND_FROM_EMAIL`: The verified "from" address for registration OTP emails (e.g., `noreply@yourdomain.com`).
-  - `NODE_ENV`: Set to `production`.
-  - `CLIENT_URL`: The domain of this Vercel project itself (e.g. `https://my-lms-portal.vercel.app`). *Note: If you don't know the exact domain name yet, you can add it as a placeholder and update it after your first deployment.*
+---
 
-* **Frontend Variables (Injected during Vite build)**:
-  - `VITE_API_URL`: Set this value to `/api` (since both frontend and backend share the same domain, relative pathing is fully supported!).
+## Option B: Separate Deployments
 
-### 3. Deploy
-1. Click **Deploy**. Vercel will install dependencies, build the Vite React app, register the serverless API routes, and deploy the application.
-2. Verify the project URL. Once the deployment domain is generated, ensure that you update the backend `CLIENT_URL` environment variable to match the exact URL (e.g., `https://my-lms-portal.vercel.app`) in the settings and trigger a redeployment for it to take effect.
+This strategy deploys the frontend and backend as two completely independent Vercel projects (e.g., `my-lms-client.vercel.app` and `my-lms-api.vercel.app`).
+
+### Step 1: Deploy the Backend
+1. On Vercel, select **Add New > Project** and import the repository.
+2. Configure project settings:
+   - **Framework Preset**: Select **Other**.
+   - **Root Directory**: Set to `backend`.
+3. Set **Environment Variables**:
+   - `MONGO_URI`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `NODE_ENV` as described above.
+   - `CLIENT_URL`: Point this to your frontend Vercel deployment URL (e.g. `https://my-lms-client.vercel.app`). *You can update this after deploying the frontend.*
+4. Click **Deploy** and copy the generated Backend URL (e.g., `https://my-lms-api.vercel.app`).
+
+### Step 2: Deploy the Frontend
+1. In the Vercel dashboard, select **Add New > Project** and import the repository again.
+2. Configure project settings:
+   - **Framework Preset**: Select **Vite**.
+   - **Root Directory**: Set to `frontend`.
+3. Set **Environment Variables**:
+   - `VITE_API_URL`: Your Vercel backend deployment URL + `/api` (e.g., `https://my-lms-api.vercel.app/api`).
+4. Click **Deploy**.
