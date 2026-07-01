@@ -1,4 +1,4 @@
-// src/models/Course.js
+
 import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema(
@@ -12,7 +12,7 @@ const courseSchema = new mongoose.Schema(
             required: true,
         },
         thumbnail: {
-            type: String, // URL to the image (e.g., local upload or cloud)
+            type: String, 
             required: true,
         },
         category: {

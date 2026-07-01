@@ -11,13 +11,11 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Public routes
 router.post('/register', registerStudent);
-router.post('/verify-email', verifyEmail); // Using POST because we are submitting an OTP
+router.post('/verify-email', verifyEmail); 
 router.post('/login', loginUser);
 router.post('/refresh', refreshAccessToken);
 
-// Protected routes
 router.post('/logout', protect, logoutUser);
 router.put('/profile', protect, updateUserProfile);
 

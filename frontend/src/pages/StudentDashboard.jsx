@@ -7,7 +7,7 @@ const StudentDashboard = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [availableCourses, setAvailableCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('my-courses'); // 'my-courses' or 'catalog'
+  const [activeTab, setActiveTab] = useState('my-courses'); 
   const navigate = useNavigate();
 
   const fetchDashboardData = async () => {
@@ -29,7 +29,7 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    
     fetchDashboardData();
   }, []);
 
@@ -38,7 +38,7 @@ const StudentDashboard = () => {
       setLoading(true);
       await api.post('/student/enroll', { courseId });
       alert('Successfully enrolled in course!');
-      fetchDashboardData(); // Refresh data
+      fetchDashboardData(); 
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to enroll in course');
       setLoading(false);
@@ -61,7 +61,7 @@ const StudentDashboard = () => {
         </Typography>
       </Box>
 
-      {/* Tabs Layout */}
+      {}
       <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
         <Button 
           variant={activeTab === 'my-courses' ? 'contained' : 'outlined'} 

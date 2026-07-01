@@ -1,4 +1,4 @@
-// src/models/Enrollment.js
+
 import mongoose from 'mongoose';
 
 const enrollmentSchema = new mongoose.Schema(
@@ -18,10 +18,9 @@ const enrollmentSchema = new mongoose.Schema(
             default: Date.now,
         },
     },
-    { timestamps: true } // Creates createdAt and updatedAt automatically
+    { timestamps: true } 
 );
 
-// Prevent a student from enrolling in the same course twice
 enrollmentSchema.index({ studentId: 1, courseId: 1 }, { unique: true });
 
 const Enrollment = mongoose.model('Enrollment', enrollmentSchema);

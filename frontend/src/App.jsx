@@ -9,7 +9,6 @@ import { CircularProgress, Box } from "@mui/material";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Navbar from "./components/Navbar.jsx";
 
-// Lazy loaded page components
 const CoursePlayer = lazy(() => import("./pages/CoursePlayer.jsx"));
 const StudentDashboard = lazy(() => import("./pages/StudentDashboard.jsx"));
 const TrainerDashboard = lazy(() => import("./pages/TrainerDashboard.jsx"));
@@ -29,23 +28,23 @@ const App = () => {
       }>
         <Routes>
           <Route path="/" element={<Navigate to="/login" replace />} />
-          {/* Public Routes */}
+          {}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
-          {/* Protected Student Routes */}
+          {}
           <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
             <Route path="/student/dashboard" element={<StudentDashboard />} />
             <Route path="/student/course/:id" element={<CoursePlayer />} />
           </Route>
 
-          {/* Protected Trainer Routes (Admins can usually access trainer views too) */}
+          {}
           <Route element={<ProtectedRoute allowedRoles={["trainer", "admin"]} />}>
             <Route path="/trainer/dashboard" element={<TrainerDashboard />} />
           </Route>
 
-          {/* Protected Admin Routes */}
+          {}
           <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Route>

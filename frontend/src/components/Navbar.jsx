@@ -1,4 +1,4 @@
-// frontend/src/components/Navbar.jsx
+
 import { useState } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
-  // Edit Profile States
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [profileData, setProfileData] = useState({ name: "", email: "", password: "" });
 
@@ -32,12 +31,10 @@ const Navbar = () => {
       }
       
       const response = await api.put('/auth/profile', body);
-      
-      // Update local storage
+
       const updatedUser = { ...user, ...response.data };
       localStorage.setItem('user', JSON.stringify(updatedUser));
-      
-      // Update redux state
+
       dispatch(updateProfile(response.data));
       
       setOpenEditProfile(false);
@@ -47,7 +44,6 @@ const Navbar = () => {
     }
   };
 
-  // Do not show the navbar if the user is not logged in
   if (!user) return null;
 
   return (
@@ -77,7 +73,7 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Edit Profile Dialog */}
+      {}
       <Dialog open={openEditProfile} onClose={() => setOpenEditProfile(false)} maxWidth="xs" fullWidth>
         <DialogTitle>Edit Profile</DialogTitle>
         <DialogContent dividers>

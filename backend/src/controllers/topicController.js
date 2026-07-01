@@ -1,14 +1,11 @@
 import Topic from '../models/Topic.js';
 import Course from '../models/Course.js';
 
-// @desc    Create a topic for a course
-// @route   POST /api/topics
-// @access  Private (Trainer/Admin)
 export const createTopic = async (req, res) => {
     const { courseId, title, description, videoUrl, order } = req.body;
 
     try {
-        // Verify course exists and user has permission
+        
         const course = await Course.findById(courseId);
         if (!course) return res.status(404).json({ message: 'Course not found' });
 
@@ -20,7 +17,7 @@ export const createTopic = async (req, res) => {
             courseId,
             title,
             description,
-            videoUrl, // Storing the YouTube URL as requested
+            videoUrl, 
             order,
         });
 
@@ -30,12 +27,9 @@ export const createTopic = async (req, res) => {
     }
 };
 
-// @desc    Get all topics for a specific course
-// @route   GET /api/topics/:courseId
-// @access  Public (Students will access this to view topics)
 export const getTopicsByCourse = async (req, res) => {
     try {
-        // Sort by the 'order' field so they play sequentially
+        
         const topics = await Topic.find({ courseId: req.params.courseId }).sort('order');
         res.status(200).json(topics);
     } catch (error) {
@@ -43,9 +37,6 @@ export const getTopicsByCourse = async (req, res) => {
     }
 };
 
-// @desc    Update a topic
-// @route   PUT /api/topics/:id
-// @access  Private (Trainer/Admin)
 export const updateTopic = async (req, res) => {
     try {
         const topic = await Topic.findById(req.params.id);
@@ -65,9 +56,6 @@ export const updateTopic = async (req, res) => {
     }
 };
 
-// @desc    Delete a topic
-// @route   DELETE /api/topics/:id
-// @access  Private (Trainer/Admin)
 export const deleteTopic = async (req, res) => {
     try {
         const topic = await Topic.findById(req.params.id);

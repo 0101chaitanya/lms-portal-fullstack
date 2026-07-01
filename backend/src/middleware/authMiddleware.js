@@ -1,19 +1,16 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-// Protect routes
 export const protect = async (req, res, next) => {
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         try {
-            // Get token from header
+            
             token = req.headers.authorization.split(' ')[1];
 
-            // Verify token
             const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-            // Get user from the token (exclude password)
             req.user = await User.findById(decoded.id).select('-password');
 
             if (!req.user || req.user.status === 'inactive') {
@@ -32,7 +29,6 @@ export const protect = async (req, res, next) => {
     }
 };
 
-// Admin role authorization
 export const admin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
         next();
@@ -41,8 +37,6 @@ export const admin = (req, res, next) => {
     }
 };
 
-// Trainer & Admin role authorization 
-// (Notice how this allows both Admins and Trainers to upload courses)
 export const trainer = (req, res, next) => {
     if (req.user && (req.user.role === 'trainer' || req.user.role === 'admin')) {
         next();
@@ -51,7 +45,6 @@ export const trainer = (req, res, next) => {
     }
 };
 
-// Student role authorization
 export const student = (req, res, next) => {
     if (req.user && req.user.role === 'student') {
         next();

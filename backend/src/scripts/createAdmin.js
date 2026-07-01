@@ -1,4 +1,4 @@
-// backend/src/createAdmin.js
+
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import User from '../models/User.js';
@@ -21,7 +21,7 @@ const createAdmin = async () => {
         const admin = await User.create({
             name: 'Mr. Admin',
             email: adminEmail,
-            password: 'Pass@123', // Automatically hashed by User model middleware
+            password: 'Pass@123', 
             role: 'admin',
             isVerified: true,
             status: 'active'

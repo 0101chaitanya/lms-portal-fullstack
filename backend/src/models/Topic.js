@@ -1,4 +1,4 @@
-// src/models/Topic.js
+
 import mongoose from 'mongoose';
 
 const topicSchema = new mongoose.Schema(
@@ -17,7 +17,7 @@ const topicSchema = new mongoose.Schema(
             required: true,
         },
         videoUrl: {
-            type: String, // YouTube URL as requested
+            type: String, 
             required: true,
         },
         order: {

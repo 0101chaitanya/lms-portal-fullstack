@@ -14,7 +14,7 @@ const CoursePlayer = () => {
         const response = await api.get(`/topics/${courseId}`);
         setTopics(response.data);
         if (response.data.length > 0) {
-          setCurrentTopic(response.data[0]); // Default to first video
+          setCurrentTopic(response.data[0]); 
         }
       } catch (error) {
         console.error('Error fetching topics:', error);
@@ -24,7 +24,6 @@ const CoursePlayer = () => {
     fetchTopics();
   }, [courseId]);
 
-  // Helper to extract YouTube embed ID
   const getEmbedUrl = (url) => {
     if (!url) return '';
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -41,7 +40,7 @@ const CoursePlayer = () => {
         width: '100%' 
       }}>
         
-        {/* Left Side: Video Player & Description */}
+        {}
         <Box sx={{ 
           flex: { xs: 'none', md: '8 8 0px' },
           width: { xs: '100%', md: '66.67%' }
@@ -79,7 +78,7 @@ const CoursePlayer = () => {
           )}
         </Box>
 
-        {/* Right Side: Topics List (Course Content) */}
+        {}
         <Box sx={{ 
           flex: { xs: 'none', md: '4 4 0px' },
           width: { xs: '100%', md: '33.33%' }

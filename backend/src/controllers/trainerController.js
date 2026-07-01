@@ -2,15 +2,11 @@ import Course from '../models/Course.js';
 import Topic from '../models/Topic.js';
 import Enrollment from '../models/Enrollment.js';
 
-// @desc    Get trainer dashboard metrics
-// @route   GET /api/trainer/metrics
-// @access  Private (Trainer)
 export const getTrainerMetrics = async (req, res) => {
     try {
         const isAdmin = req.user.role === 'admin';
         const filter = isAdmin ? {} : { trainerId: req.user._id };
 
-        // Get courses matching filter (all for admin, specific trainer's for trainer)
         const courses = await Course.find(filter);
         const courseIds = courses.map(course => course._id);
 

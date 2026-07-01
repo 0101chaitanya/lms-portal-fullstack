@@ -3,9 +3,6 @@ import Course from '../models/Course.js';
 import Topic from '../models/Topic.js';
 import Enrollment from '../models/Enrollment.js';
 
-// @desc    Get admin dashboard metrics
-// @route   GET /api/admin/metrics
-// @access  Private/Admin
 export const getDashboardMetrics = async (req, res) => {
     try {
         const totalTrainers = await User.countDocuments({ role: 'trainer' });
@@ -24,9 +21,6 @@ export const getDashboardMetrics = async (req, res) => {
     }
 };
 
-// @desc    Add a new trainer
-// @route   POST /api/admin/trainers
-// @access  Private/Admin
 export const addTrainer = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -42,7 +36,7 @@ export const addTrainer = async (req, res) => {
             email,
             password,
             role: 'trainer',
-            isVerified: true, // Assuming admins directly verify trainers upon creation
+            isVerified: true, 
         });
 
         res.status(201).json({
@@ -57,14 +51,11 @@ export const addTrainer = async (req, res) => {
     }
 };
 
-// @desc    Get all users by role (trainers or students)
-// @route   GET /api/admin/users?role=trainer
-// @access  Private/Admin
 export const getUsersByRole = async (req, res) => {
     const { role } = req.query;
 
     try {
-        // Only allow fetching trainers or students
+        
         if (role !== 'trainer' && role !== 'student') {
             return res.status(400).json({ message: 'Invalid role specified' });
         }
@@ -76,9 +67,6 @@ export const getUsersByRole = async (req, res) => {
     }
 };
 
-// @desc    Update user details (Trainer or Student)
-// @route   PUT /api/admin/users/:id
-// @access  Private/Admin
 export const updateUser = async (req, res) => {
     const { name, email } = req.body;
 
@@ -104,9 +92,6 @@ export const updateUser = async (req, res) => {
     }
 };
 
-// @desc    Delete a user
-// @route   DELETE /api/admin/users/:id
-// @access  Private/Admin
 export const deleteUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -117,10 +102,10 @@ export const deleteUser = async (req, res) => {
             }
 
             if (user.role === 'student') {
-                // Delete all enrollments for this student
+                
                 await Enrollment.deleteMany({ studentId: user._id });
             } else if (user.role === 'trainer') {
-                // Delete all courses created by this trainer, along with their topics and enrollments
+                
                 const courses = await Course.find({ trainerId: user._id });
                 const courseIds = courses.map(c => c._id);
                 await Topic.deleteMany({ courseId: { $in: courseIds } });
@@ -138,9 +123,6 @@ export const deleteUser = async (req, res) => {
     }
 };
 
-// @desc    Toggle user status (Active/Inactive)
-// @route   PATCH /api/admin/users/:id/status
-// @access  Private/Admin
 export const toggleUserStatus = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);

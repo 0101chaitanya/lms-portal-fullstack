@@ -2,9 +2,6 @@ import Course from '../models/Course.js';
 import Topic from '../models/Topic.js';
 import Enrollment from '../models/Enrollment.js';
 
-// @desc    Create a new course
-// @route   POST /api/courses
-// @access  Private (Trainer/Admin)
 export const createCourse = async (req, res) => {
     const { title, description, thumbnail, category } = req.body;
 
@@ -14,7 +11,7 @@ export const createCourse = async (req, res) => {
             description,
             thumbnail,
             category,
-            trainerId: req.user._id, // Tied to the logged-in trainer or admin
+            trainerId: req.user._id, 
         });
 
         res.status(201).json(course);
@@ -23,15 +20,11 @@ export const createCourse = async (req, res) => {
     }
 };
 
-// @desc    Get all courses (for public catalog or admin/trainer view)
-// @route   GET /api/courses
-// @access  Public
 export const getCourses = async (req, res) => {
     try {
-        // Optionally filter by trainerId if passed as a query
+        
         const filter = req.query.trainerId ? { trainerId: req.query.trainerId } : {};
 
-        // Populate trainer details
         const courses = await Course.find(filter).populate('trainerId', 'name email profileImage');
         res.status(200).json(courses);
     } catch (error) {
@@ -39,9 +32,6 @@ export const getCourses = async (req, res) => {
     }
 };
 
-// @desc    Get single course by ID
-// @route   GET /api/courses/:id
-// @access  Public
 export const getCourseById = async (req, res) => {
     try {
         const course = await Course.findById(req.params.id).populate('trainerId', 'name email');
@@ -56,9 +46,6 @@ export const getCourseById = async (req, res) => {
     }
 };
 
-// @desc    Update a course
-// @route   PUT /api/courses/:id
-// @access  Private (Trainer/Admin)
 export const updateCourse = async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
@@ -67,7 +54,6 @@ export const updateCourse = async (req, res) => {
             return res.status(404).json({ message: 'Course not found' });
         }
 
-        // Ensure the user updating the course is the owner OR an admin
         if (course.trainerId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Not authorized to update this course' });
         }
@@ -83,9 +69,6 @@ export const updateCourse = async (req, res) => {
     }
 };
 
-// @desc    Delete a course
-// @route   DELETE /api/courses/:id
-// @access  Private (Trainer/Admin)
 export const deleteCourse = async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
@@ -98,11 +81,10 @@ export const deleteCourse = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized to delete this course' });
         }
 
-        // Delete associated topics first
         await Topic.deleteMany({ courseId: course._id });
-        // Delete associated enrollments
+        
         await Enrollment.deleteMany({ courseId: course._id });
-        // Then delete the course
+        
         await Course.deleteOne({ _id: course._id });
 
         res.status(200).json({ message: 'Course and associated topics and enrollments deleted' });

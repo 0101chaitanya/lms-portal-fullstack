@@ -8,7 +8,6 @@ import { protect, student } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// All routes here are strictly for Students
 router.use(protect, student);
 
 router.post('/enroll', enrollInCourse);

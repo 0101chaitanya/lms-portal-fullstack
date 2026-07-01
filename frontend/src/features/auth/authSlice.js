@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/axios';
 
-// Get user from local storage
 const user = JSON.parse(localStorage.getItem('user'));
 
 const initialState = {
@@ -12,7 +11,6 @@ const initialState = {
     message: '',
 };
 
-// Login user
 export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) => {
     try {
         const response = await api.post('/auth/login', userData);
@@ -26,7 +24,6 @@ export const login = createAsyncThunk('auth/login', async (userData, thunkAPI) =
     }
 });
 
-// Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
     try {
         await api.post('/auth/logout');

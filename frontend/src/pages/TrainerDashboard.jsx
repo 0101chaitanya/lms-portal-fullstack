@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Container, Grid, Card, CardContent, Typography, Box, CircularProgress, TextField, Button, Paper, Alert, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import api from '../api/axios';
 import { useSelector } from 'react-redux';
@@ -11,8 +11,7 @@ const TrainerDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  
-  // Form State
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -21,11 +20,9 @@ const TrainerDashboard = () => {
   });
   const [formMsg, setFormMsg] = useState({ type: '', text: '' });
 
-  // Course Edit State
   const [openEditCourseDialog, setOpenEditCourseDialog] = useState(false);
   const [editCourseData, setEditCourseData] = useState({ id: '', title: '', description: '', category: '', thumbnail: '' });
 
-  // Topic Management State
   const [openTopicsDialog, setOpenTopicsDialog] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [topics, setTopics] = useState([]);
@@ -33,7 +30,6 @@ const TrainerDashboard = () => {
   const [topicFormData, setTopicFormData] = useState({ id: '', title: '', description: '', videoUrl: '', order: 1 });
   const [topicEditMode, setTopicEditMode] = useState(false);
 
-  // Course handlers
   const handleEditCourseClick = (course) => {
     setEditCourseData({
       id: course._id,
@@ -71,7 +67,6 @@ const TrainerDashboard = () => {
     }
   };
 
-  // Topic handlers
   const fetchTopics = async (courseId) => {
     setTopicLoading(true);
     try {
@@ -114,7 +109,7 @@ const TrainerDashboard = () => {
       setTopicFormData({ id: '', title: '', description: '', videoUrl: '', order: 1 });
       setTopicEditMode(false);
       fetchTopics(selectedCourse._id);
-      fetchData(); // Refresh topics metrics on dashboard
+      fetchData(); 
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to save topic');
     }
@@ -136,14 +131,14 @@ const TrainerDashboard = () => {
       try {
         await api.delete(`/topics/${topicId}`);
         fetchTopics(selectedCourse._id);
-        fetchData(); // Refresh topics metrics on dashboard
+        fetchData(); 
       } catch (error) {
         alert(error.response?.data?.message || 'Failed to delete topic');
       }
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [metricsRes, coursesRes] = await Promise.all([
         api.get('/trainer/metrics'),
@@ -156,12 +151,11 @@ const TrainerDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchData]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -174,7 +168,7 @@ const TrainerDashboard = () => {
       await api.post('/courses', formData);
       setFormMsg({ type: 'success', text: 'Course created successfully!' });
       setFormData({ title: '', description: '', category: '', thumbnail: '' });
-      fetchData(); // Refresh data
+      fetchData(); 
     } catch (error) {
       setFormMsg({ type: 'error', text: error.response?.data?.message || 'Failed to create course' });
     }
@@ -207,7 +201,7 @@ const TrainerDashboard = () => {
         </Box>
       </Box>
 
-      {/* Metrics Row */}
+      {}
       <Grid container spacing={3} sx={{ mb: 5 }}>
         <Grid xs={12} sm={4}>
           <Card elevation={3} sx={{ bgcolor: 'primary.main', color: 'primary.contrastText' }}>
@@ -236,7 +230,7 @@ const TrainerDashboard = () => {
       </Grid>
 
       <Grid container spacing={4}>
-        {/* Create Course Form */}
+        {}
         <Grid xs={12} md={5}>
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -275,7 +269,7 @@ const TrainerDashboard = () => {
           </Paper>
         </Grid>
 
-        {/* List of Created Courses */}
+        {}
         <Grid xs={12} md={7}>
           <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
             {user?.role === 'admin' ? 'All Published Courses' : 'My Published Courses'}
@@ -334,7 +328,7 @@ const TrainerDashboard = () => {
         </Grid>
       </Grid>
 
-      {/* Edit Course Dialog */}
+      {}
       <Dialog open={openEditCourseDialog} onClose={() => setOpenEditCourseDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Edit Course Info</DialogTitle>
         <DialogContent>
@@ -380,12 +374,12 @@ const TrainerDashboard = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Manage Topics Dialog */}
+      {}
       <Dialog open={openTopicsDialog} onClose={() => setOpenTopicsDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>Manage Topics for {selectedCourse?.title}</DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={3}>
-            {/* Topic Form */}
+            {}
             <Grid xs={12} md={5}>
               <Paper variant="outlined" sx={{ p: 2 }}>
                 <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -425,7 +419,7 @@ const TrainerDashboard = () => {
               </Paper>
             </Grid>
 
-            {/* Topics List */}
+            {}
             <Grid xs={12} md={7}>
               <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'bold' }}>
                 Course Topics List

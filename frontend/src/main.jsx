@@ -10,11 +10,11 @@ const dribbbleTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#6366f1', // Indigo
+      main: '#6366f1', 
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#a855f7', // Purple
+      main: '#a855f7', 
       contrastText: '#ffffff',
     },
     background: {

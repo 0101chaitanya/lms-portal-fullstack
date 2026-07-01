@@ -1,4 +1,4 @@
-// index.js
+
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -15,32 +15,28 @@ import trainerRoutes from './routes/trainerRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 
-// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Rate limiter for authentication endpoints
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per 15 mins
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
     message: { message: 'Too many authentication attempts from this IP, please try again after 15 minutes' },
     standardHeaders: true,
     legacyHeaders: false,
 });
 
-// Middleware
 app.use(helmet());
 app.use(compression());
-app.use(express.json()); // To parse JSON data in the req.body
-app.use(cookieParser()); // To parse cookies
+app.use(express.json()); 
+app.use(cookieParser()); 
 app.use(cors({
-    origin: process.env.CLIENT_URL, // Update this to your frontend URL
-    credentials: true, // Allow sending cookies
+    origin: process.env.CLIENT_URL, 
+    credentials: true, 
 }));
 
-// Database Connection
 let isConnected = false;
 const connectDB = async () => {
     if (isConnected || mongoose.connection.readyState === 1) {
@@ -59,10 +55,8 @@ const connectDB = async () => {
     }
 };
 
-// Initiate database connection immediately
 connectDB();
 
-// Routes
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/courses', courseRoutes);
@@ -70,10 +64,8 @@ app.use('/api/topics', topicRoutes);
 app.use('/api/trainer', trainerRoutes);
 app.use('/api/student', studentRoutes);
 
-// Error Handler Middleware
 app.use(errorHandler);
 
-// Start the server (only if not running as a serverless function on Vercel)
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);

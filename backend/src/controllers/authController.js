@@ -6,14 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Helper to generate a 6-digit OTP
 const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// @desc    Register a new student
-// @route   POST /api/auth/register
-// @access  Public
 export const registerStudent = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -24,11 +20,9 @@ export const registerStudent = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Generate 6-digit OTP and set expiration to 10 minutes from now
         const otp = generateOTP();
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
-        // Create user (unverified by default)
         const user = await User.create({
             name,
             email,
@@ -40,9 +34,9 @@ export const registerStudent = async (req, res) => {
         });
 
         if (user) {
-            // Send OTP email via Resend
+            
             await resend.emails.send({
-                from: process.env.RESEND_FROM_EMAIL || 'Acme <onboarding@resend.dev>', // Use verified Resend domain if set
+                from: process.env.RESEND_FROM_EMAIL || 'Acme <onboarding@resend.dev>', 
                 to: [user.email],
                 subject: 'Your LMS Portal Verification Code',
                 html: `
@@ -65,9 +59,6 @@ export const registerStudent = async (req, res) => {
     }
 };
 
-// @desc    Verify user email with OTP
-// @route   POST /api/auth/verify-email
-// @access  Public
 export const verifyEmail = async (req, res) => {
     const { email, otp } = req.body;
 
@@ -82,7 +73,6 @@ export const verifyEmail = async (req, res) => {
             return res.status(400).json({ message: 'Email is already verified.' });
         }
 
-        // Check if OTP matches and hasn't expired
         if (user.otp !== otp) {
             return res.status(400).json({ message: 'Invalid OTP.' });
         }
@@ -91,7 +81,6 @@ export const verifyEmail = async (req, res) => {
             return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
         }
 
-        // Update user to verified and remove OTP fields
         user.isVerified = true;
         user.otp = undefined;
         user.otpExpires = undefined;
@@ -103,21 +92,16 @@ export const verifyEmail = async (req, res) => {
     }
 };
 
-// @desc    Auth user & get token
-// @route   POST /api/auth/login
-// @access  Public
 export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
 
-        // Enforce OTP verification
         if (user && !user.isVerified) {
             return res.status(401).json({ message: 'Please verify your email using the OTP before logging in.' });
         }
 
-        // Check if user exists, is active, and passwords match
         if (user && user.status === 'active' && (await user.matchPassword(password))) {
             const accessToken = generateAccessToken(user._id, user.role);
             generateRefreshToken(res, user._id);
@@ -139,9 +123,6 @@ export const loginUser = async (req, res) => {
     }
 };
 
-// @desc    Logout user / clear cookie
-// @route   POST /api/auth/logout
-// @access  Private
 export const logoutUser = (req, res) => {
     res.cookie('jwt', '', {
         httpOnly: true,
@@ -150,9 +131,6 @@ export const logoutUser = (req, res) => {
     res.status(200).json({ message: 'Logged out successfully' });
 };
 
-// @desc    Refresh access token
-// @route   POST /api/auth/refresh
-// @access  Public
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.jwt;
 
@@ -177,9 +155,6 @@ export const refreshAccessToken = async (req, res) => {
     }
 };
 
-// @desc    Update user profile
-// @route   PUT /api/auth/profile
-// @access  Private
 export const updateUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id);

@@ -16,12 +16,10 @@ const Login = () => {
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isError) {
-      // Message is handled below via alert
-    }
+
 
     if (isSuccess || user) {
-      // Redirect based on role
+      
       if (user?.role === 'admin') navigate('/admin/dashboard');
       else if (user?.role === 'trainer') navigate('/trainer/dashboard');
       else navigate('/student/dashboard');
@@ -52,7 +50,7 @@ const Login = () => {
         justifyContent: 'center', 
         width: '100%' 
       }}>
-        {/* Left Side: Illustration / Image (Hidden on small screens) */}
+        {}
         <Box sx={{ 
           display: { xs: 'none', md: 'block' },
           flex: '1 1 0px',
@@ -72,7 +70,7 @@ const Login = () => {
                 display: 'block'
               }}
             />
-            {/* Visual gradient overlay on image */}
+            {}
             <Box sx={{
               position: 'absolute',
               bottom: 0,
@@ -92,11 +90,11 @@ const Login = () => {
           </Box>
         </Box>
 
-        {/* Right Side: Login Form Card */}
+        {}
         <Box sx={{ 
           flex: '1 1 0px',
           width: '100%',
-          maxWidth: { xs: '100%', md: '41.67%' } // Equivalent to md={5}
+          maxWidth: { xs: '100%', md: '41.67%' } 
         }}>
           <Paper elevation={3} sx={{ p: 4, backgroundColor: 'rgba(17, 24, 39, 0.7)', WebkitBackdropFilter: 'blur(20px)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: '800', textAlign: 'center', mb: 1, background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>

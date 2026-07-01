@@ -11,15 +11,13 @@ const AdminDashboard = () => {
   const [metrics, setMetrics] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('trainer'); // 'trainer' or 'student'
+  const [activeTab, setActiveTab] = useState('trainer'); 
   
   const navigate = useNavigate();
 
-  // Add Trainer Dialog State
   const [openDialog, setOpenDialog] = useState(false);
   const [trainerData, setTrainerData] = useState({ name: '', email: '', password: '' });
 
-  // Edit User Dialog State
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [editUserData, setEditUserData] = useState({ id: '', name: '', email: '' });
 
@@ -64,7 +62,7 @@ const AdminDashboard = () => {
   const handleToggleStatus = async (userId) => {
     try {
       await api.patch(`/admin/users/${userId}/status`);
-      fetchAdminData(activeTab); // Refresh the list
+      fetchAdminData(activeTab); 
     } catch (error) {
       console.error('Error toggling status:', error);
     }
@@ -117,7 +115,7 @@ const AdminDashboard = () => {
         </Box>
       </Box>
 
-      {/* Platform Metrics */}
+      {}
       <Box sx={{ 
         display: 'flex', 
         flexWrap: 'wrap', 
@@ -153,7 +151,7 @@ const AdminDashboard = () => {
         ))}
       </Box>
 
-      {/* User Management Section */}
+      {}
       <Paper elevation={3} sx={{ width: '100%', mb: 2, p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Box>
@@ -179,7 +177,7 @@ const AdminDashboard = () => {
           )}
         </Box>
 
-        {/* Users Table */}
+        {}
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -236,7 +234,7 @@ const AdminDashboard = () => {
         </TableContainer>
       </Paper>
 
-      {/* Add Trainer Dialog */}
+      {}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Add New Trainer</DialogTitle>
         <DialogContent>
@@ -250,7 +248,7 @@ const AdminDashboard = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Edit User Dialog */}
+      {}
       <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
         <DialogTitle>Edit {activeTab === 'trainer' ? 'Trainer' : 'Student'} Info</DialogTitle>
         <DialogContent>

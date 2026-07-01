@@ -9,7 +9,6 @@ const initialState = {
     message: '',
 };
 
-// Fetch public course catalog
 export const fetchCourses = createAsyncThunk('courses/getAll', async (_, thunkAPI) => {
     try {
         const response = await api.get('/courses');
