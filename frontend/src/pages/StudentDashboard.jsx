@@ -11,7 +11,6 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   const fetchDashboardData = async () => {
-    setLoading(true);
     try {
       const [enrolledRes, allCoursesRes] = await Promise.all([
         api.get('/student/enrolled-courses'),
@@ -30,16 +29,19 @@ const StudentDashboard = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDashboardData();
   }, []);
 
   const handleEnroll = async (courseId) => {
     try {
+      setLoading(true);
       await api.post('/student/enroll', { courseId });
       alert('Successfully enrolled in course!');
       fetchDashboardData(); // Refresh data
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to enroll in course');
+      setLoading(false);
     }
   };
 

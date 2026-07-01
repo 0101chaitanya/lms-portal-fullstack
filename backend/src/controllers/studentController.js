@@ -59,8 +59,11 @@ export const getEnrolledCourses = async (req, res) => {
             })
             .sort('-enrolledAt'); // Newest enrollments first
 
+        // Filter out enrollments where the course no longer exists (defensive check)
+        const validEnrollments = enrollments.filter(enrollment => enrollment.courseId);
+
         // Extract just the course objects to send back
-        const enrolledCourses = enrollments.map(enrollment => ({
+        const enrolledCourses = validEnrollments.map(enrollment => ({
             ...enrollment.courseId._doc, // The populated course document
             enrolledAt: enrollment.enrolledAt, // Include the date they enrolled
         }));

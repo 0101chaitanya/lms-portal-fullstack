@@ -52,6 +52,8 @@ export const updateTopic = async (req, res) => {
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
         const course = await Course.findById(topic.courseId);
+        if (!course) return res.status(404).json({ message: 'Associated course not found' });
+
         if (course.trainerId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Not authorized' });
         }
@@ -72,6 +74,8 @@ export const deleteTopic = async (req, res) => {
         if (!topic) return res.status(404).json({ message: 'Topic not found' });
 
         const course = await Course.findById(topic.courseId);
+        if (!course) return res.status(404).json({ message: 'Associated course not found' });
+
         if (course.trainerId.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Not authorized' });
         }

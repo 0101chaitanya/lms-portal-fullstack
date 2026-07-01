@@ -48,7 +48,7 @@ const CoursePlayer = () => {
         }}>
           <Paper elevation={3} sx={{ overflow: 'hidden', mb: 2 }}>
             <Box sx={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
-              {currentTopic && currentTopic.videoUrl ? (
+              {currentTopic && currentTopic.videoUrl && getEmbedUrl(currentTopic.videoUrl) ? (
                 <iframe
                   style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
                   src={getEmbedUrl(currentTopic.videoUrl)}
@@ -59,7 +59,9 @@ const CoursePlayer = () => {
                 />
               ) : (
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', position: 'absolute', width: '100%', bgcolor: '#000' }}>
-                  <Typography color="white">No Video Available</Typography>
+                  <Typography color="white">
+                    {currentTopic && currentTopic.videoUrl ? 'Invalid Video URL' : 'No Video Available'}
+                  </Typography>
                 </Box>
               )}
             </Box>

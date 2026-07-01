@@ -1,5 +1,6 @@
 import Course from '../models/Course.js';
 import Topic from '../models/Topic.js';
+import Enrollment from '../models/Enrollment.js';
 
 // @desc    Create a new course
 // @route   POST /api/courses
@@ -99,10 +100,12 @@ export const deleteCourse = async (req, res) => {
 
         // Delete associated topics first
         await Topic.deleteMany({ courseId: course._id });
+        // Delete associated enrollments
+        await Enrollment.deleteMany({ courseId: course._id });
         // Then delete the course
         await Course.deleteOne({ _id: course._id });
 
-        res.status(200).json({ message: 'Course and associated topics deleted' });
+        res.status(200).json({ message: 'Course and associated topics and enrollments deleted' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -1,13 +1,13 @@
 // backend/src/createAdmin.js
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import User from '../models/user.js';
+import User from '../models/User.js';
 
 dotenv.config();
 
 const createAdmin = async () => {
     try {
-        //  await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('Database connected successfully.');
 
         const adminEmail = 'ololchaitanya@yahoo.com';

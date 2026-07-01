@@ -42,7 +42,7 @@ export const registerStudent = async (req, res) => {
         if (user) {
             // Send OTP email via Resend
             await resend.emails.send({
-                from: 'Acme <onboarding@resend.dev>', // Update with your verified Resend domain
+                from: process.env.RESEND_FROM_EMAIL || 'Acme <onboarding@resend.dev>', // Use verified Resend domain if set
                 to: [user.email],
                 subject: 'Your LMS Portal Verification Code',
                 html: `

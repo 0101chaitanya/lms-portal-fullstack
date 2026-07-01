@@ -1,5 +1,5 @@
 // frontend/src/components/Navbar.jsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, updateProfile } from "../features/auth/authSlice";
@@ -14,13 +14,6 @@ const Navbar = () => {
   // Edit Profile States
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [profileData, setProfileData] = useState({ name: "", email: "", password: "" });
-
-  // Sync profile details with logged-in user
-  useEffect(() => {
-    if (user) {
-      setProfileData({ name: user.name, email: user.email, password: "" });
-    }
-  }, [user]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -71,7 +64,10 @@ const Navbar = () => {
                 {user.name} ({user.role})
               </strong>
             </Typography>
-            <Button variant="outlined" color="primary" onClick={() => setOpenEditProfile(true)}>
+            <Button variant="outlined" color="primary" onClick={() => {
+              setProfileData({ name: user.name, email: user.email, password: "" });
+              setOpenEditProfile(true);
+            }}>
               Edit Profile
             </Button>
             <Button variant="outlined" color="error" onClick={handleLogout}>

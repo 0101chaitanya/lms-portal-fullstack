@@ -159,7 +159,6 @@ const TrainerDashboard = () => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -437,7 +436,7 @@ const TrainerDashboard = () => {
                 <Typography color="text.secondary">No topics added yet.</Typography>
               ) : (
                 <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
-                  {topics.map((topic, index) => (
+                  {topics.map((topic) => (
                     <Paper key={topic._id} variant="outlined" sx={{ p: 1.5, mb: 1 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box>
