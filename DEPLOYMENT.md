@@ -1,54 +1,35 @@
-# Vercel Deployment Guide
+# Vercel Deployment Guide (Unified Setup)
 
-This workspace contains two main projects: the Vite-based React frontend (`frontend`) and the Express-based Node.js backend (`backend`). Both are configured to be deployed on Vercel.
+This project is configured as a **unified monorepo deployment** on Vercel. A single `vercel.json` file in the root manages building both the frontend client and backend API, hosting them together on the **same domain**.
 
-Follow the instructions below to deploy both components and connect them.
-
----
-
-## Step 1: Deploy the Backend
-
-The backend is configured to run as a **Vercel Serverless Function** using Node.js.
-
-1. **Sign in to Vercel** and select **Add New > Project**.
-2. **Import your repository** containing this codebase.
-3. In the project settings, configure:
-   - **Project Name**: `learning-experience-platform-backend` (or similar)
-   - **Framework Preset**: `Other`
-   - **Root Directory**: `backend`
-4. Expand **Environment Variables** and add the following keys:
-   - `MONGO_URI`: Your MongoDB connection string (e.g. `mongodb+srv://...`).
-   - `JWT_ACCESS_SECRET`: A secure string for signing access tokens (e.g., `your_secure_access_secret`).
-   - `JWT_REFRESH_SECRET`: A secure string for signing refresh tokens (e.g., `your_secure_refresh_secret`).
-   - `RESEND_API_KEY`: Your Resend mailer API key.
-   - `RESEND_FROM_EMAIL`: The verified "from" address for registration OTP emails (e.g. `noreply@yourdomain.com`).
-   - `NODE_ENV`: Set to `production`.
-   - `CLIENT_URL`: Point this to your frontend URL (e.g. `https://learning-experience-platform-frontend.vercel.app`). *Note: If you haven't deployed the frontend yet, you can update this variable in your project settings later.*
-5. Click **Deploy**.
-6. Once deployed, copy the generated **Deployment Domain** (e.g. `https://learning-experience-platform-backend.vercel.app`).
+This configuration eliminates CORS configuration issues and simplifies secure `HttpOnly` cookie setups.
 
 ---
 
-## Step 2: Deploy the Frontend
+## Deployment Steps
 
-The frontend is a React application built with Vite, utilizing client-side routing.
+### 1. Create the Project on Vercel
+1. Log in to your Vercel Dashboard and click **Add New > Project**.
+2. **Import your repository** containing this monorepo.
+3. In the project settings configuration:
+   - **Framework Preset**: Select **Vite** (Vercel will auto-detect Vite inside the monorepo root builders).
+   - **Root Directory**: Leave this **blank** (keep it as the repository root directory `./`).
 
-1. In the Vercel dashboard, select **Add New > Project** again.
-2. **Import the same repository**.
-3. In the project settings, configure:
-   - **Project Name**: `learning-experience-platform-frontend` (or similar)
-   - **Framework Preset**: `Vite` (Vercel will auto-detect Vite)
-   - **Root Directory**: `frontend`
-4. Expand **Environment Variables** and add:
-   - `VITE_API_URL`: Your Vercel backend deployment domain + `/api` (e.g. `https://learning-experience-platform-backend.vercel.app/api`).
-5. Click **Deploy**.
-6. Copy the generated **Deployment Domain** for the frontend.
+### 2. Configure Environment Variables
+Expand the **Environment Variables** section and add the following keys. *All of these will be configured in this single Vercel project:*
 
----
+* **Backend Variables (Node.js runtime)**:
+  - `MONGO_URI`: Your MongoDB database connection string (e.g. `mongodb+srv://...`).
+  - `JWT_ACCESS_SECRET`: A secure random string for signing access tokens (e.g., `your_secure_access_secret`).
+  - `JWT_REFRESH_SECRET`: A secure random string for signing refresh tokens (e.g., `your_secure_refresh_secret`).
+  - `RESEND_API_KEY`: Your Resend API mailer key.
+  - `RESEND_FROM_EMAIL`: The verified "from" address for registration OTP emails (e.g., `noreply@yourdomain.com`).
+  - `NODE_ENV`: Set to `production`.
+  - `CLIENT_URL`: The domain of this Vercel project itself (e.g. `https://my-lms-portal.vercel.app`). *Note: If you don't know the exact domain name yet, you can add it as a placeholder and update it after your first deployment.*
 
-## Step 3: Connect Frontend and Backend
+* **Frontend Variables (Injected during Vite build)**:
+  - `VITE_API_URL`: Set this value to `/api` (since both frontend and backend share the same domain, relative pathing is fully supported!).
 
-1. Go back to your Vercel **Backend** project settings page.
-2. Select **Settings > Environment Variables**.
-3. Edit the value of `CLIENT_URL` to point to the frontend domain you copied in Step 2 (e.g. `https://learning-experience-platform-frontend.vercel.app`).
-4. **Redeploy** the backend (or trigger a rebuild/deployment from the deployments tab) for the new environment variable value to take effect.
+### 3. Deploy
+1. Click **Deploy**. Vercel will install dependencies, build the Vite React app, register the serverless API routes, and deploy the application.
+2. Verify the project URL. Once the deployment domain is generated, ensure that you update the backend `CLIENT_URL` environment variable to match the exact URL (e.g., `https://my-lms-portal.vercel.app`) in the settings and trigger a redeployment for it to take effect.
